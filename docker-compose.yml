@@ -1,0 +1,98 @@
+version: "3.9"
+services:
+  flask_labeler:
+    build:
+      context: backend
+      dockerfile: LabelerDockerfile
+    container_name: mlcheap-labeler
+    image: mlcheap.com/labeler
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_DEBUG: "False"
+    volumes:
+      - labelerdata:/home
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - back_labeler
+
+  flask_sdk:
+    build:
+      context: backend
+      dockerfile: SdkDockerFile
+    container_name: mlcheap-sdk
+    image: mlcheap.com/sdk
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_DEBUG: "False"
+    volumes:
+      - sdkdata:/home
+    depends_on:
+      - mongodb
+    networks:
+      - sdk
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /data/log
+    volumes:
+      - mongodbdata:/data/db
+      - mongodblog:/data/log
+    networks:
+      - sdk
+      - back_labeler
+
+  webservice:
+    build:
+      context: webapp
+      dockerfile: Dockerfile
+    image: mlcheap.com/webservice
+    container_name: webservice
+    restart: unless-stopped
+    environment:
+      APP_ENV: "prod"
+      APP_NAME: "webservice"
+      APP_DEBUG: "false"
+      SERVICE_NAME: "webservice"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - webservicedata:/var/log/apache
+    depends_on:
+      - flask_labeler
+    networks:
+      - frontend
+
+
+
+networks:
+  frontend:
+    driver: bridge
+  back_labeler:
+    driver: bridge
+  sdk:
+    driver: bridge
+
+
+volumes:
+  mongodbdata:
+    driver: local
+  mongodblog:
+    driver: local
+  labelerdata:
+    driver: local
+  sdkdata:
+    driver: local
+  webservicedata:
+    driver: local
+ 
+ 
+ 
