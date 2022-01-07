@@ -35,6 +35,7 @@ services:
     networks:
       - sdk
 
+
   mongodb:
     image: mongo
     container_name: mongodb
@@ -55,22 +56,31 @@ services:
       dockerfile: Dockerfile
     image: mlcheap.com/webservice
     container_name: webservice
-    restart: unless-stopped
     environment:
       APP_ENV: "prod"
       APP_NAME: "webservice"
       APP_DEBUG: "false"
       SERVICE_NAME: "webservice"
+    volumes:
+      - webapp_build:/build/build
+    depends_on:
+      - flask_labeler
+      - httpd
+    networks:
+      - frontend
+
+  httpd:
+    build:
+      context: httpd
+      dockerfile: Dockerfile
+    image: mlcheap.com/httpd
+    container_name: mlcheap-httpd
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - webservicedata:/var/log/apache
-    depends_on:
-      - flask_labeler
-    networks:
-      - frontend
-
+      - webapp_build:/srv/www/webapp
 
 
 networks:
@@ -91,7 +101,7 @@ volumes:
     driver: local
   sdkdata:
     driver: local
-  webservicedata:
+  webapp_build:
     driver: local
  
  
