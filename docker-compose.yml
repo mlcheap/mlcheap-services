@@ -50,12 +50,12 @@ services:
       - sdk
       - back_labeler
 
-  webservice:
+  web_builder:
     build:
       context: webapp
       dockerfile: Dockerfile
-    image: mlcheap.com/webservice
-    container_name: webservice
+    image: mlcheap.com/web_builder
+    container_name: web-builder
     environment:
       APP_ENV: "prod"
       APP_NAME: "webservice"
@@ -79,6 +79,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "6221:6221"
     volumes:
       - webapp_build:/srv/www/webapp
 
