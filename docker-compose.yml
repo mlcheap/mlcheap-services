@@ -9,6 +9,8 @@ services:
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "False"
+      MONGO_URL: "mongodb"
+      MODEL_URL: "ml-backend"
     volumes:
       - labelerdata:/home
     depends_on:
@@ -23,6 +25,7 @@ services:
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "False"
+      MONGO_URL: "mongodb"
     ports:
       - "6221:6221"
     volumes:
@@ -50,6 +53,7 @@ services:
       APP_NAME: "webservice"
       APP_DEBUG: "false"
       SERVICE_NAME: "webservice"
+      PROXY: "flask_labeler"
     volumes:
       - webapp_build:/build/build
     depends_on:
