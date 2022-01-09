@@ -1,0 +1,6 @@
+[submodule "webapp"]
+	path = webapp
+	url = git@github.com:mlcheap/webapp.git
+[submodule "backend"]
+	path = backend
+	url = git@github.com:mlcheap/backend.git

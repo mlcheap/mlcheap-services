@@ -69,6 +69,18 @@ services:
     networks:
       - frontend
 
+  ml-backend:
+    build: ml-backend
+    ports: 
+      - "5000:5000"
+    volumes:
+      - mldata:/home
+    environment:
+      FLASK_APP: app
+      FLASK_ENV: development
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_RUN_PORT: 5000
+
   httpd:
     build:
       context: httpd
@@ -103,6 +115,8 @@ volumes:
   sdkdata:
     driver: local
   webapp_build:
+    driver: local
+  mldata:
     driver: local
  
  
