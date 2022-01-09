@@ -4,3 +4,6 @@
 [submodule "backend"]
 	path = backend
 	url = git@github.com:mlcheap/backend.git
+[submodule "ml-backend"]
+	path = ml-backend
+	url = https://github.com/mlcheap/ml-backend
