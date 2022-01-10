@@ -10,7 +10,9 @@ services:
       APP_ENV: "prod"
       APP_DEBUG: "False"
       MONGO_URL: "mongodb"
-      MODEL_URL: "ml-backend"
+      MODEL_URL: "ml-backend:5000"
+    ports:
+      - "5100:5100"
     volumes:
       - labelerdata:/home
     depends_on:
@@ -80,6 +82,8 @@ services:
   skillmap:
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     command: /cloud_sql_proxy --dir=/cloudsql -instances=skilllab-app:europe-west4:skillmap-pg13-production=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
+    ports:
+      - "8765:5432"
     volumes:
       - ./c.json:/secrets/cloudsql/credentials.json
     restart: always
@@ -87,6 +91,8 @@ services:
   vacancies:
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     command: /cloud_sql_proxy --dir=/cloudsql -instances=skilllab-app:europe-west4:vacancies-api-prod=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
+    ports:
+      - "5678:5432"
     volumes:
       - ./c.json:/secrets/cloudsql/credentials.json
     restart: always
