@@ -7,7 +7,7 @@ services:
     container_name: mlcheap-labeler
     restart: unless-stopped
     environment:
-      FRONT_URL: "http://104.155.17.28:443"
+      FRONT_URL: "https://skillLab.mlcheap.com"
       APP_ENV: "prod"
       APP_DEBUG: "False"
       MONGO_URL: "mongodb"
@@ -40,6 +40,7 @@ services:
 
   mongodb:
     image: mongo
+    container_name: mlcheap-mongodb
     restart: unless-stopped
     environment:
       MONGODB_DATA_DIR: /data/db
@@ -49,6 +50,7 @@ services:
       - mongodblog:/data/log
 
   web_builder:
+    container_name: mlcheap-webbuilder
     build:
       context: webapp
       dockerfile: Dockerfile
@@ -68,6 +70,7 @@ services:
     build:
       context: ml-backend
       dockerfile: Dockerfile
+    container_name: mlcheap-ml-backend
     volumes:
       - mldata:/home
     environment:
@@ -82,21 +85,23 @@ services:
       - vacancies
 
   skillmap:
+    container_name: proxy-skillmap
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     command: /cloud_sql_proxy --dir=/cloudsql -instances=skilllab-app:europe-west4:skillmap-pg13-production=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
     ports:
       - "8765:5432"
     volumes:
-      - ./credentials.json:/secrets/cloudsql/credentials.json
+      - /srv/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
     restart: always
 
   vacancies:
+    container_name: proxy-vacancies
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     command: /cloud_sql_proxy --dir=/cloudsql -instances=skilllab-app:europe-west4:vacancies-api-prod=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
     ports:
       - "5678:5432"
     volumes:
-      - ./credentials.json:/secrets/cloudsql/credentials.json
+      - /srv/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
     restart: always
 
   httpd:
@@ -110,6 +115,7 @@ services:
       - "443:443"
     volumes:
       - webapp_build:/srv/www/webapp
+      - /srv/ssl:/srv/ssl
 
 
 volumes:
