@@ -15,7 +15,7 @@ services:
     ports:
       - "5100:5100"
     volumes:
-      - labelerdata:/home
+      - ${LOGDIR}/labeler.log:/home/error.log
     depends_on:
       - mongodb
 
@@ -33,7 +33,8 @@ services:
     ports:
       - "6221:6221"
     volumes:
-      - sdkdata:/home
+    volumes:
+      - ${LOGDIR}/sdk.log:/home/error.log
     depends_on:
       - mongodb
 
@@ -46,8 +47,8 @@ services:
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /data/log
     volumes:
-      - mongodbdata:/data/db
-      - mongodblog:/data/log
+      - ${SRVDIR}/mongodb:/data/db
+      - ${LOGDIR}/mongodb.log:/data/log
 
   web_builder:
     container_name: mlcheap-webbuilder
@@ -61,10 +62,9 @@ services:
       SERVICE_NAME: "webservice"
       PROXY: "flask_labeler"
     volumes:
-      - webapp_build:/build/build
+      - ${SRVDIR}/www/webapp:/build/build
     depends_on:
       - flask_labeler
-      - httpd
 
   ml-backend:
     build:
@@ -72,7 +72,7 @@ services:
       dockerfile: Dockerfile
     container_name: mlcheap-ml-backend
     volumes:
-      - mldata:/home
+      - ${SRVDIR}/ml-backend/models:/home/models
     environment:
       FLASK_APP: app
       FLASK_ENV: development
@@ -91,7 +91,7 @@ services:
     ports:
       - "8765:5432"
     volumes:
-      - /srv/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
+      - ${SRVDIR}/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
     restart: always
 
   vacancies:
@@ -101,7 +101,7 @@ services:
     ports:
       - "5678:5432"
     volumes:
-      - /srv/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
+      - ${SRVDIR}/sql_proxy/credentials.json:/secrets/cloudsql/credentials.json
     restart: always
 
   httpd:
@@ -114,23 +114,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - webapp_build:/srv/www/webapp
-      - /srv/ssl:/srv/ssl
-
-
-volumes:
-  mongodbdata:
-    driver: local
-  mongodblog:
-    driver: local
-  labelerdata:
-    driver: local
-  sdkdata:
-    driver: local
-  webapp_build:
-    driver: local
-  mldata:
-    driver: local
+      - ${SRVDIR}/www/webapp:/srv/www/webapp
+      - ${SRVDIR}/ssl:/srv/ssl
+    depends_on:
+      - web_builder
  
  
  
