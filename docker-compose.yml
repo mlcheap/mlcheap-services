@@ -16,6 +16,7 @@ services:
       - "5100:5100"
     volumes:
       - ${LOGDIR}/labeler.log:/home/error.log
+      - ${SRVDIR}/data:/home/datasets
     depends_on:
       - mongodb
 
@@ -35,6 +36,7 @@ services:
     volumes:
     volumes:
       - ${LOGDIR}/sdk.log:/home/error.log
+      - ${SRVDIR}/data:/home/datasets
     depends_on:
       - mongodb
 
@@ -62,7 +64,7 @@ services:
       SERVICE_NAME: "webservice"
       PROXY: "flask_labeler"
     volumes:
-      - ${SRVDIR}/www/webapp:/build/build
+      - builddata:/build/build
     depends_on:
       - flask_labeler
 
@@ -114,10 +116,11 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${SRVDIR}/www/webapp:/srv/www/webapp
+      - builddata:/srv/www/webapp
       - ${SRVDIR}/ssl:/srv/ssl
     depends_on:
       - web_builder
  
- 
- 
+volumes:
+  builddata: 
+    driver: local
