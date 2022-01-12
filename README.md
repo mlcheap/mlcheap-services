@@ -8,10 +8,10 @@ this repository uses apache to give public access to following services
 - `skillmap`: the sql proxy service for SkillLab's ESCO tags database, published `localhost:8765`
 - `vacancies`: the sql proxy service for SkillLab's Azuna jobs database, published `localhost:5678`
 - `httpd`: the Apache web service gives public `https` access to web and api services (`http` port `:80` redirects to the `https`):
-  - `https://skillLab.mlcheap.com -> /srv/www/webapp`: the main web service root directory 
-  - `https://skillLab.mlcheap.com/api -> http://flask_labeler:5100/api`: the internal API to access labeling service
-  - `https://skillapi.mlcheap.com -> http://flask_sdk:6221`: the API for client, to create and manage projects
-  - `https://skillai.mlcheap.com -> http://ml-backend:5000`: The API for ML modelling and inference 
+  - `https://skillLab.mlcheap.com -> /srv/www/webapp`
+  - `https://skillLab.mlcheap.com/api -> http://flask_labeler:5100/api`
+  - `https://skillapi.mlcheap.com -> http://flask_sdk:6221`
+  - `https://skillai.mlcheap.com -> http://ml-backend:5000`
  
 ## Docker compose configuration 
 - `.env` contains `SRVDIR` for server component-related & `LOGDIR` for log related data 
