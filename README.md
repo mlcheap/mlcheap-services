@@ -1,5 +1,18 @@
 # ML cheap services
-this repository uses apache to give public access to following services
+this repository uses apache to give public access to all `ML Cheap` services. After cloning this repository, please follow the following steps
+- `.env` contains `SRVDIR` for server component-related & `LOGDIR` for log related data 
+- Put sql proxy credentials (service account) in `${SRVDIR}/sql_proxy/credentials.json`
+- Put ssl credentials in `${SRVDIR}/ssl/` and private key in `${SRVDIR}/ssl/private`
+- Make empty log files `labeler.log`, `sdk.log`, `mongodb.log`, all under `${LOGDIR}`
+- run `docker-compose up -d`
+
+### Persisted volumes 
+- ML models will be saved in `${SRVDIR}/ml-backend/mdels`
+- MongoDB data is bound to `${SRVDIR}/mongodb/`
+- Web build files are in the named volume `builddata`, the location is managed by docker
+
+## Overall structure 
+
 - `flask_labeler`: the backend for web app, published `localhost:5100/api`
 - `flask_sdk`: the backend for public API, published `localhost:6221`
 - `mongodb`: the mongo DB service
@@ -12,17 +25,6 @@ this repository uses apache to give public access to following services
   - `https://skillLab.mlcheap.com/api -> http://flask_labeler:5100/api`
   - `https://skillapi.mlcheap.com -> http://flask_sdk:6221`
   - `https://skillai.mlcheap.com -> http://ml-backend:5000`
- 
-## Docker compose configuration 
-- `.env` contains `SRVDIR` for server component-related & `LOGDIR` for log related data 
-- Put sql proxy credentials (service account) in `${SRVDIR}/sql_proxy/credentials.json`
-- Put ssl credentials in `${SRVDIR}/ssl/` and private key in `${SRVDIR}/ssl/private`
-- Make empty log files `labeler.log`, `sdk.log`, `mongodb.log`, all under `${LOGDIR}`
-
-## Persisted volumes 
-- ML models will be saved in `${SRVDIR}/ml-backend/mdels`
-- MongoDB data is bound to `${SRVDIR}/mongodb/`
-- Web build files are in the named volume `builddata`, the location is managed by docker
 
 ## Apache configuration  
 The configuration file `http/my-httpd.conf `overrides the default configuration by loading the following modules for proxy and reverse proxy 
