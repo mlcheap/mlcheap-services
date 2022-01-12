@@ -1,4 +1,5 @@
 # ML cheap services
+## Spinning up services
 this repository uses apache to give public access to all `ML Cheap` services. After cloning this repository, please follow the following steps
 - `.env` contains `SRVDIR` for server component-related & `LOGDIR` for log related data 
 - Put sql proxy credentials (service account) in `${SRVDIR}/sql_proxy/credentials.json`
