@@ -11,7 +11,7 @@ services:
       APP_ENV: "prod"
       APP_DEBUG: "False"
       MONGO_URL: "mongodb"
-      MODEL_URL: "ml-backend:5000"
+      MODEL_URL: "http://ml-backend:5000"
     ports:
       - "5100:5100"
     volumes:
@@ -45,12 +45,13 @@ services:
     image: mongo
     container_name: mlcheap-mongodb
     restart: unless-stopped
+    command: mongod --profile=2 
     environment:
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /data/log
     volumes:
       - ${SRVDIR}/mongodb:/data/db
-      - ${LOGDIR}/mongodb.log:/data/log
+      - ${LOGDIR}/mongodb.log:/var/log/mongodb/mongodb.log
 
   web_builder:
     container_name: mlcheap-webbuilder
@@ -63,6 +64,7 @@ services:
       APP_DEBUG: "false"
       SERVICE_NAME: "webservice"
       PROXY: "flask_labeler"
+      MODEL_URL: "ml-backend:5000"
     volumes:
       - builddata:/build/build
     depends_on:
@@ -82,6 +84,7 @@ services:
       FLASK_RUN_PORT: 5000
     ports:
       - "5000:5000"
+      - "8890:8888"
     depends_on:
       - skillmap
       - vacancies
