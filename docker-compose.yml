@@ -5,7 +5,7 @@ services:
       context: backend
       dockerfile: LabelerDockerfile
     container_name: mlcheap-labeler
-    restart: unless-stopped
+    restart: always
     environment:
       FRONT_URL: "https://skillLab.mlcheap.com"
       APP_ENV: "prod"
@@ -26,7 +26,7 @@ services:
       context: backend
       dockerfile: SdkDockerFile
     container_name: mlcheap-sdk
-    restart: unless-stopped
+    restart: always
     environment:
       APP_ENV: "prod"
       APP_DEBUG: "False"
@@ -44,7 +44,7 @@ services:
   mongodb:
     image: mongo
     container_name: mlcheap-mongodb
-    restart: unless-stopped
+    restart: always
     command: mongod --profile=2 
     environment:
       MONGODB_DATA_DIR: /data/db
@@ -88,6 +88,7 @@ services:
     depends_on:
       - skillmap
       - vacancies
+    restart: always
 
   dashboard:
     build:
@@ -110,6 +111,7 @@ services:
     depends_on:
       - skillmap
       - vacancies
+    restart: always
 
   skillmap:
     container_name: proxy-skillmap
@@ -136,7 +138,7 @@ services:
       context: httpd
       dockerfile: Dockerfile
     container_name: mlcheap-httpd
-    restart: unless-stopped
+    restart: always
     ports:
       - "80:80"
       - "443:443"
