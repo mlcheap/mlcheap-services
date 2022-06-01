@@ -113,6 +113,22 @@ services:
       - vacancies
     restart: always
 
+  ml_deep_learning: 
+    container_name: ml_deep_learning
+    build:
+      context: ml_deep_learning
+      dockerfile: Dockerfile
+    ports:
+      - "6000:80"
+
+  admin: 
+    container_name: mlcheap-admin
+    build:
+      context: admin
+      dockerfile: Dockerfile
+    volumes:
+      - ./admin/src:/app/src
+
   skillmap:
     container_name: proxy-skillmap
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
