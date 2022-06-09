@@ -14,6 +14,7 @@ this repository uses apache to give public access to all `ML Cheap` services. Af
 
 ## Overall structure 
 
+- `ml_deep_learning`: the deep learning service, published `localhost:6000`
 - `flask_labeler`: the backend for web app, published `localhost:5100/api`
 - `flask_sdk`: the backend for public API, published `localhost:6221`
 - `mongodb`: the mongo DB service
