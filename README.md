@@ -14,19 +14,38 @@ this repository uses apache to give public access to all `ML Cheap` services. Af
 
 ## Overall structure 
 
-- `ml_deep_learning`: the deep learning service, published `localhost:6000`
-- `flask_labeler`: the backend for web app, published `localhost:5100/api`
-- `flask_sdk`: the backend for public API, published `localhost:6221`
+- `ml_deep_learning`: the deep learning service
+- `ml-backend`: backend for creating and accessing ML models
+- `dashboard`: the service for dashboard service
+- `admin`: the service for admin console
+- `flask_labeler`: the backend for web app
+- `flask_sdk`: the backend for public API
 - `mongodb`: the mongo DB service
 - `web_builder`: the npm module for building web services
-- `ml-backend`: backend for creating and accessing ML models, published `localhost:5000`
-- `skillmap`: the sql proxy service for SkillLab's ESCO tags database, published `localhost:8765`
-- `vacancies`: the sql proxy service for SkillLab's Azuna jobs database, published `localhost:5678`
+- `skillmap`: the sql proxy service for SkillLab's ESCO tags database
+- `vacancies`: the sql proxy service for SkillLab's Azuna jobs database
 - `httpd`: the Apache web service gives public `https` access to web and api services (`http` port `:80` redirects to the `https`):
   - `https://skillLab.mlcheap.com -> /srv/www/webapp`
   - `https://skillLab.mlcheap.com/api -> http://flask_labeler:5100/api`
   - `https://skillapi.mlcheap.com -> http://flask_sdk:6221`
   - `https://skillai.mlcheap.com -> http://ml-backend:5000`
+  - `https://skilldeep.mlcheap.com -> http://ml_deep_learning:80`
+
+
+### Summary of ports
+| Service | Ports |  
+|---|---|
+ml_deep_learning    |  443/tcp, 0:6000->80/tcp    |             
+mlcheap-admin       |  |                                          
+mlcheap-dashboard   | 0:4000->4000/tcp, 0:8889->8888/tcp |
+mlcheap-httpd       | 0:443->443/tcp, 0:80->80/tcp     | 
+mlcheap-labeler     | 0:5100->5100/tcp                     |   
+mlcheap-ml-backend  | 0:5000->5000/tcp, 0:8890->8888/tcp |
+mlcheap-mongodb     |  27017/tcp                 |                    
+mlcheap-sdk         | 0:6221->6221/tcp      |                  
+mlcheap-webbuilder  | 0              |                                   
+proxy-skillmap      | 0:8765->5432/tcp                        
+proxy-vacancies     | 0:5678->5432/tcp |
 
 ## Apache configuration  
 The configuration file `http/my-httpd.conf `overrides the default configuration by loading the following modules for proxy and reverse proxy 
