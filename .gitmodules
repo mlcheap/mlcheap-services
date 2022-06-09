@@ -7,3 +7,6 @@
 [submodule "ml-backend"]
 	path = ml-backend
 	url = https://github.com/mlcheap/ml-backend
+[submodule "admin"]
+	path = admin
+	url = https://github.com/mlcheap/admin
